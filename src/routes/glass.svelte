@@ -163,7 +163,8 @@
 
           //alert('完成')
         }
-        messages.push({ name: `全部结束`, time: new Date() });
+		messages.push({ name: `全部结束`, time: new Date() });
+		messages.push({ name: `--------------------------------分割綫`, time: '分割綫--------------------------------' });
         messages = messages;
       });
     };
