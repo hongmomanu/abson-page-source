@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { sysmessages } from '../store.js';
   import {
     getCurrentWeek,
     getDateOfISOWeek,
@@ -10,6 +11,9 @@
   let filedialog;
   let filename = "";
   let messages = [];
+  const unsubscribe = sysmessages.subscribe(value => {
+		messages = value;
+  });
   function openFileDialog() {
 	filedialog.value = '';  
     filedialog.click();
@@ -47,19 +51,17 @@
       doc.loadZip(zip);
 
       var workbook = new Excel.Workbook();
-      messages.push({ name: "正在读取文件。。。", time: new Date() });
-      messages = messages;
+      sysmessages.addmsg({ name: "正在读取文件。。。", time: new Date() });
       workbook.xlsx.readFile(path).then(function() {
         var worksheet = workbook.getWorksheet("Disp w.34");
         if (!worksheet) {
-          alert("excel里面缺少页面 Disp w.34");
-          messages = [
+		  alert("excel里面缺少页面 Disp w.34");
+		  sysmessages.reset([
             { name: "excel里面缺少页面 Disp w.34", time: new Date() }
-          ];
+          ]);
           return;
         }
-        messages.push({ name: "读取文件成功。", time: new Date() });
-        messages = messages;
+        sysmessages.addmsg({ name: "读取文件成功。", time: new Date() });
         worksheet.eachRow(function(row, rowNumber) {
           if (rowNumber > 2) {
             //const ddate = new Date(baseTime.getTime() + (row.getCell(17) - 1) * 24 * 3600 * 1000);
@@ -151,26 +153,23 @@
           const outputFile = ospath.resolve(dir, filename);
           try {
             fs.writeFileSync(outputFile, buf);
-            messages.push({
+            sysmessages.addmsg({
               name: `${filename} 已成功！`,
               time: new Date(),
               kind: "filesuc",
               filename
             });
-            messages = messages;
           } catch (e) {
-            messages.push({
+            sysmessages.addmsg({
               name: `${filename} 文件已打开,生成失败`,
               time: new Date()
             });
-            messages = messages;
           }
 
           //alert('完成')
         }
-		messages.push({ name: `全部结束`, time: new Date() });
-		messages.push({ name: `--------------------------------分割綫`, time: '分割綫--------------------------------' });
-        messages = messages;
+		sysmessages.addmsg({ name: `全部结束`, time: new Date() });
+		sysmessages.addmsg({ name: `--------------------------------分割綫`, time: '分割綫--------------------------------' });
       });
     };
   });
