@@ -90,7 +90,7 @@
               nowmonth: makeDou(new Date().getMonth() + 1),
 			  nowday: makeDou(new Date().getDate()),
 			  packing:row.getCell(20).text,
-			  customernum:row.getCell(3).text,
+			  customernum:row.getCell(5).text,
             };
             // item.during = Factory_Map[item.itemno][0];
             // item.seller = Factory_Map[item.itemno][1];
