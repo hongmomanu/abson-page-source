@@ -96,6 +96,7 @@
               nowmonth: makeDou(new Date().getMonth() + 1),
               nowday: makeDou(new Date().getDate())
             };
+            if(!Factory_Map[item.itemno])return;
             item.during = Factory_Map[item.itemno][0];
             item.seller = Factory_Map[item.itemno][1];
             item.sellerzh = Factory_Map[item.itemno][2];
